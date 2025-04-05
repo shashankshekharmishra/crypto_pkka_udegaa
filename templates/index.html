@@ -1,15 +1,141 @@
-{% extends "base.html" %}
-{% block content %}
-<h1 class="text-center">Cryptocurrency (Bitcoin) Price Predictor</h1>
-<form method="post" action="/" class="mt-4">
-    <div class="mb-3">
-        <label for="stock" class="form-label">Stock Ticker</label>
-        <input type="text" class="form-control" id="stock" name="stock" placeholder="e.g., BTC-USD" required>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crypto Price Predictor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        select, input[type="number"], input[type="submit"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 30px;
+            color: #444;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        img {
+            display: block;
+            margin: 30px auto 0;
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media screen and (max-width: 600px) {
+            form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Crypto Price Predictor</h1>
+
+        <form method="post">
+            <label for="crypto">Select Cryptocurrency:</label>
+            <select name="crypto">
+                <option value="BTC-USD" {% if crypto == "BTC-USD" %}selected{% endif %}>Bitcoin (BTC)</option>
+                <option value="ETH-USD" {% if crypto == "ETH-USD" %}selected{% endif %}>Ethereum (ETH)</option>
+                <option value="DOGE-USD" {% if crypto == "DOGE-USD" %}selected{% endif %}>Dogecoin (DOGE)</option>
+                <option value="SOL-USD" {% if crypto == "SOL-USD" %}selected{% endif %}>Solana (SOL)</option>
+            </select>
+
+            <label>Enter number of days to predict:</label>
+            <input type="number" name="days" required>
+            <input type="submit" value="Predict">
+        </form>
+
+        {% if prices %}
+        <h2>Predicted Prices</h2>
+        <table>
+            <tr><th>Day</th><th>Predicted Close Price (USD)</th></tr>
+            {% for price in prices %}
+            <tr><td>{{ loop.index }}</td><td>{{ "%.2f"|format(price) }}</td></tr>
+            {% endfor %}
+        </table>
+
+        {% if plot_url %}
+        <img src="data:image/png;base64,{{ plot_url }}" alt="Prediction Plot">
+        {% endif %}
+        {% endif %}
     </div>
-    <div class="mb-3">
-        <label for="no_of_days" class="form-label">Number of Days to Predict</label>
-        <input type="number" class="form-control" id="no_of_days" name="no_of_days" min="1" max="100" value="10" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Predict</button>
-</form>
-{% endblock %}
+    <footer style="text-align:center; margin-top: 40px; color: #777; font-size: 14px;">
+        Powered by <strong>Shashank Shekhar Mishra</strong>
+    </footer>
+    
+</body>
+</html>
